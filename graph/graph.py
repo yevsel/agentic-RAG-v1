@@ -4,13 +4,9 @@ from graph.nodes.grade_documents import grade_retrieved_documents
 from graph.nodes.web_search import web_search
 from graph.nodes.generate import generate_node
 from graph.state import GraphState
+from graph.nodes.edges import decide_next_step, decide_node_after_grading_documents_and_llm_answer_groundness
 
 
-def decide_next_step(state: GraphState):
-    """If the grader rejected any document, go search the web; otherwise generate the answer."""
-    if state["web_search_flag"]:
-        return "web_search"
-    return "generate_node"
 
 
 builder = StateGraph(GraphState)
@@ -28,6 +24,14 @@ builder.add_conditional_edges(
     {"web_search": "web_search", "generate_node": "generate_node"},
 )
 builder.add_edge("web_search","generate_node")
-builder.add_edge("generate_node",END)
+builder.add_conditional_edges(
+    "generate_node",
+    decide_node_after_grading_documents_and_llm_answer_groundness,
+    {
+        "not_supported": "generate_node",
+        "not_useful": "web_search",
+        "useful": END,
+    },
+)
 
 graph = builder.compile()
