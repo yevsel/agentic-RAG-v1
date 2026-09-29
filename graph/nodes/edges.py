@@ -1,6 +1,16 @@
 from graph.state import GraphState
 from graph.chains.hallucination_grader_chain import hallucination_grader_chain
 from graph.chains.answer_grader_chain import answer_grader_chain
+from graph.chains.intent_classifier import intent_classifier_chain
+
+def route_question(state: GraphState):
+    """Adaptive RAG entry point: decide whether to hit the vectorstore or go straight to web search."""
+    user_question = state["question"]
+    routing_decision = intent_classifier_chain.invoke({"question": user_question})
+
+    if routing_decision.datasource == "web_search":
+        return "web_search"
+    return "retrieve_relevant_docs_node"
 
 def decide_next_step(state: GraphState):
     """If the grader rejected any document, go search the web; otherwise generate the answer."""
