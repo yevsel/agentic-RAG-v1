@@ -1,0 +1,38 @@
+[project]
+name = "agentic-rag-v1"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Yevoo Justice Selasi", email = "sel3491justice@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "beautifulsoup4>=4.15.0",
+    "black>=26.5.1",
+    "isort>=9.0.1",
+    "langchain>=1.4.2",
+    "langchain-chroma>=1.1.0",
+    "langchain-community>=0.4.2",
+    "langchain-openai>=1.6.6",
+    "langchain-tavily>=0.2.18",
+    "langchain-text-splitters>=1.1.2",
+    "langchain-unstructured>=1.0.1",
+    "langchainhub>=0.1.21",
+    "langgraph>=1.2.12",
+    "langgraph-cli[inmem]>=0.4.32",
+    "python-dotenv>=1.2.3",
+    "tiktoken>=0.14.0",
+    "unstructured>=0.27.10",
+]
+
+[project.scripts]
+agentic-rag-v1 = "agentic_rag_v1:main"
+
+requires = ["uv_build>=0.12.17,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
